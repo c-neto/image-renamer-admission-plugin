@@ -1,0 +1,24 @@
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: pod-watcher-role
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["list", "watch"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: pod-watcher-rolebinding
+subjects:
+  - kind: ServiceAccount
+    name: image-renamer-operator-controller-manager
+    namespace: image-renamer-operator-system
+roleRef:
+  kind: ClusterRole
+  name: pod-watcher-role
+  apiGroup: rbac.authorization.k8s.io

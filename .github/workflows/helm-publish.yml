@@ -39,6 +39,9 @@ jobs:
         run: |
           helm package deploy/helm/image-renamer-admission-plugin
 
+      - run: |
+          helm registry login ghcr.io -u ${{ github.repository_owner }} -p ${{ secrets.GITHUB_TOKEN }}
+
       - name: Publish Helm chart
         run: |
           helm push image-renamer-admission-plugin-*.tgz oci://ghcr.io/${{ github.repository_owner }}/helm-charts

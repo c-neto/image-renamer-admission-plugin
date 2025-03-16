@@ -41,6 +41,11 @@ func LoadConfig() error {
 	return nil
 }
 
+// SetConfig sets the configuration for the server
+func SetConfig(c config.Config) {
+	cfg = c
+}
+
 // Replace image based on rules
 func replaceImage(image string, rules []config.Rule) string {
 	for _, rule := range rules {

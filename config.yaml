@@ -1,0 +1,5 @@
+rules:
+  - source: "quay.io"
+    target: "my-ecr-quay"
+  - source: "docker.io"
+    target: "my-ecr-docker"

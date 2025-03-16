@@ -1,9 +1,0 @@
-apiVersion: core.example.com/v1
-kind: PodWatcher
-metadata:
-  labels:
-    app.kubernetes.io/name: image-renamer-operator
-    app.kubernetes.io/managed-by: kustomize
-  name: podwatcher-sample
-spec:
-  # TODO(user): Add fields here

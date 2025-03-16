@@ -1,8 +1,0 @@
-apiVersion: core.example.com/v1
-kind: PodWatcher
-metadata:
-  name: podwatcher-example
-spec:
-  labelSelector:
-    app: nginx
-    foo: bar

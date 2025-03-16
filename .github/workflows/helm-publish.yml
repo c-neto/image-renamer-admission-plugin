@@ -29,7 +29,9 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Package Helm chart
-        run: helm package deploy/helm/image-renamer-admission-controller
+        run: |
+          helm package deploy/helm/image-renamer-admission-controller
+          ls -lahrt
 
       - name: Publish Helm chart
         run: |

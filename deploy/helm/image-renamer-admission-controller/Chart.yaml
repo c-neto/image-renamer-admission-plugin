@@ -1,0 +1,5 @@
+apiVersion: v2
+name: image-renamer-admission-controller
+description: A Helm chart for deploying the Image Renamer Admission Controller
+version: 0.1.0
+appVersion: "1.0"

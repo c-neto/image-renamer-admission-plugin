@@ -1,5 +1,3 @@
 rules:
-  - source: "quay.io"
-    target: "my-ecr-quay"
-  - source: "docker.io"
-    target: "my-ecr-docker"
+  - source: "nginx"
+    target: "public.ecr.aws/nginx/nginx:stable-perl"

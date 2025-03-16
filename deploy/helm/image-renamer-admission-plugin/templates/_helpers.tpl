@@ -1,5 +1,5 @@
 {{- define "image-renamer-admission-plugin.fullname" -}}
-{{- .Release.Name | trunc 63 | trimSuffix "-" -}}
+{{ .Release.Name | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{- define "image-renamer-admission-plugin.selectorLabels" -}}

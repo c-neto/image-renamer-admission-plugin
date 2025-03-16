@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "image-renamer-admission-controller.fullname" . }}
+  name: {{ include "image-renamer-admission-plugin.fullname" . }}
   labels:
-    {{- include "image-renamer-admission-controller.labels" . | nindent 4 }}
+    {{- include "image-renamer-admission-plugin.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "image-renamer-admission-controller.selectorLabels" . | nindent 6 }}
+      {{- include "image-renamer-admission-plugin.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "image-renamer-admission-controller.selectorLabels" . | nindent 8 }}
+        {{- include "image-renamer-admission-plugin.selectorLabels" . | nindent 8 }}
     spec:
       containers:
         - name: {{ .Chart.Name }}
@@ -29,7 +29,7 @@ spec:
       volumes:
         - name: tls-certs
           secret:
-            secretName: image-renamer-admission-controller-tls
+            secretName: image-renamer-admission-plugin-tls
       nodeSelector:
         {{- toYaml .Values.nodeSelector | nindent 8 }}
       tolerations:

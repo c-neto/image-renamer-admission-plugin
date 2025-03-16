@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "image-renamer-admission-controller.fullname" . }}
+  name: {{ include "image-renamer-admission-plugin.fullname" . }}
   labels:
-    {{- include "image-renamer-admission-controller.labels" . | nindent 4 }}
+    {{- include "image-renamer-admission-plugin.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -12,4 +12,4 @@ spec:
     - port: 443
       targetPort: 8443
   selector:
-    {{- include "image-renamer-admission-controller.selectorLabels" . | nindent 4 }}
+    {{- include "image-renamer-admission-plugin.selectorLabels" . | nindent 4 }}

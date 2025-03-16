@@ -1,15 +1,15 @@
 apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
 metadata:
-  name: {{ include "image-renamer-admission-controller.fullname" . }}
+  name: {{ include "image-renamer-admission-plugin.fullname" . }}
 webhooks:
-  - name: image-renamer-admission-controller.k8s.io
+  - name: image-renamer-admission-plugin.k8s.io
     clientConfig:
       service:
-        name: {{ include "image-renamer-admission-controller.fullname" . }}
+        name: {{ include "image-renamer-admission-plugin.fullname" . }}
         namespace: {{ .Release.Namespace }}
         path: /mutate
-      caBundle: {{ .Values.caBundle | default (lookup "v1" "Secret" .Release.Namespace "image-renamer-admission-controller-tls").data."ca.crt" | b64enc }}
+      caBundle: {{ .Values.caBundle | default (lookup "v1" "Secret" .Release.Namespace "image-renamer-admission-plugin-tls").data."ca.crt" | b64enc }}
     rules:
       - operations: ["CREATE"]
         apiGroups: [""]

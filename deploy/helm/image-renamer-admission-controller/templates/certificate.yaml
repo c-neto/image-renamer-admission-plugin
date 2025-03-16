@@ -1,7 +1,7 @@
 apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
-  name: image-renamer-admission-controller-selfsigned-issuer
+  name: image-renamer-admission-plugin-selfsigned-issuer
   namespace: {{ .Release.Namespace }}
 spec:
   selfSigned: {}
@@ -10,12 +10,12 @@ spec:
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: image-renamer-admission-controller-tls
+  name: image-renamer-admission-plugin-tls
   namespace: {{ .Release.Namespace }}
 spec:
   dnsNames:
-    - {{ include "image-renamer-admission-controller.fullname" . }}.{{ .Release.Namespace }}.svc
-  secretName: image-renamer-admission-controller-tls
+    - {{ include "image-renamer-admission-plugin.fullname" . }}.{{ .Release.Namespace }}.svc
+  secretName: image-renamer-admission-plugin-tls
   issuerRef:
-    name: image-renamer-admission-controller-selfsigned-issuer
+    name: image-renamer-admission-plugin-selfsigned-issuer
     kind: Issuer

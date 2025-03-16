@@ -7,8 +7,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/c-neto/image-renamer-admission-controller/pkg/config"
-	"github.com/c-neto/image-renamer-admission-controller/pkg/server"
+	"github.com/c-neto/image-renamer-admission-plugin/pkg/config"
+	"github.com/c-neto/image-renamer-admission-plugin/pkg/server"
 	admissionv1 "k8s.io/api/admission/v1"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"

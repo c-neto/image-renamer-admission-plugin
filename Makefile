@@ -3,6 +3,9 @@
 run:
 	go run ./cmd/image-renamer-admission-plugin
 
+tidy:
+	go mod tidy
+
 test:
 	go test ./...
 

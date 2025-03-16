@@ -7,7 +7,7 @@ This project is an admission controller for Kubernetes that automatically prefix
 ```
 .
 ├── cmd
-│   └── image-renamer-admission-controller
+│   └── image-renamer-admission-plugin
 │       └── main.go
 ├── pkg
 │   └── admission
@@ -21,7 +21,7 @@ This project is an admission controller for Kubernetes that automatically prefix
 
 - [`go.mod`](go.mod): Go module file that defines the module path and dependencies.
 - [`go.sum`](go.sum): Go checksum file that ensures the integrity of the dependencies.
-- [`cmd/image-renamer-admission-controller/main.go`](cmd/image-renamer-admission-controller/main.go): Main application file that starts the server.
+- [`cmd/image-renamer-admission-plugin/main.go`](cmd/image-renamer-admission-plugin/main.go): Main application file that starts the server.
 - [`pkg/admission/handler.go`](pkg/admission/handler.go): Contains the admission controller logic.
 - [`pkg/admission/handler_test.go`](pkg/admission/handler_test.go): Test file that contains unit tests for the admission controller logic.
 - [`Makefile`](Makefile): Makefile to run the application.
@@ -37,7 +37,7 @@ This project is an admission controller for Kubernetes that automatically prefix
 
     ```sh
     git clone https://github.com/c-neto/image-renamer-admission-plugin.git
-    cd image-renamer-admission-controller
+    cd image-renamer-admission-plugin
     ```
 
 2. Install dependencies:

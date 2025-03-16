@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+env:
+  HELM_EXPERIMENTAL_OCI: 1
+
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest

@@ -1,7 +1,7 @@
 .PHONY: run test
 
 run:
-	go run ./cmd/image-renamer-admission-plugin
+	go run ./cmd/image-renamer-admission-plugin --http
 
 tidy:
 	go mod tidy

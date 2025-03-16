@@ -21,7 +21,7 @@ var (
 	cfg                   config.Config
 )
 
-// Load configuration from file or environment variable
+// LoadConfig loads the configuration from a file specified by the CONFIG_PATH environment variable or defaults to "config.yaml".
 func LoadConfig() error {
 	configPath := os.Getenv("CONFIG_PATH")
 	if configPath == "" {
@@ -41,12 +41,12 @@ func LoadConfig() error {
 	return nil
 }
 
-// SetConfig sets the configuration for the server
+// SetConfig sets the configuration for the server.
 func SetConfig(c config.Config) {
 	cfg = c
 }
 
-// Replace image based on rules
+// replaceImage replaces the image name based on the provided rules.
 func replaceImage(image string, rules []config.Rule) string {
 	for _, rule := range rules {
 		if strings.HasPrefix(image, rule.Source) {
@@ -56,14 +56,14 @@ func replaceImage(image string, rules []config.Rule) string {
 	return image
 }
 
-// Patch container images
+// PatchContainerImages patches the container images based on the configured rules.
 func PatchContainerImages(containers []corev1.Container) {
 	for i := range containers {
 		containers[i].Image = replaceImage(containers[i].Image, cfg.Rules)
 	}
 }
 
-// Admission handler
+// AdmissionHandler handles admission review requests and mutates the container images.
 func AdmissionHandler(w http.ResponseWriter, r *http.Request) {
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
@@ -114,13 +114,13 @@ func AdmissionHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write(respBytes)
 }
 
-// Health handler
+// HealthHandler handles health check requests and returns "ok".
 func HealthHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("ok"))
 }
 
-// Readiness handler
+// ReadinessHandler handles readiness check requests and returns "ready".
 func ReadinessHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("ready"))

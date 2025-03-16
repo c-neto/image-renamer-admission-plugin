@@ -4,7 +4,7 @@ This project is an admission controller for Kubernetes that automatically prefix
 
 ## Project Structure
 
-```
+```bash
 .
 ├── cmd
 │   └── image-renamer-admission-plugin
@@ -35,16 +35,16 @@ This project is an admission controller for Kubernetes that automatically prefix
 
 1. Clone the repository:
 
-    ```sh
-    git clone https://github.com/c-neto/image-renamer-admission-plugin.git
-    cd image-renamer-admission-plugin
-    ```
+```sh
+git clone https://github.com/c-neto/image-renamer-admission-plugin.git
+cd image-renamer-admission-plugin
+```
 
 2. Install dependencies:
 
-    ```sh
-    go mod tidy
-    ```
+```sh
+go mod tidy
+```
 
 ## Usage
 

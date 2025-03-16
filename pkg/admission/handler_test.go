@@ -7,18 +7,19 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/c-neto/image-renamer-admission-plugin/pkg/config"
 	admissionv1 "k8s.io/api/admission/v1"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 )
 
 func TestPatchContainerImages(t *testing.T) {
-	config = Config{
-		Rules: []Rule{
+	SetConfig(config.Config{
+		Rules: []config.Rule{
 			{Source: "nginx", Target: "my-registry/repo/nginx"},
 			{Source: "my-registry/repo/busybox", Target: "my-registry/repo/busybox"},
 		},
-	}
+	})
 
 	containers := []corev1.Container{
 		{Image: "nginx"},
@@ -36,11 +37,11 @@ func TestPatchContainerImages(t *testing.T) {
 }
 
 func TestAdmissionHandler(t *testing.T) {
-	config = Config{
-		Rules: []Rule{
+	SetConfig(config.Config{
+		Rules: []config.Rule{
 			{Source: "nginx", Target: "my-registry/repo/nginx"},
 		},
-	}
+	})
 
 	pod := corev1.Pod{
 		Spec: corev1.PodSpec{

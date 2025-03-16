@@ -8,13 +8,14 @@ import (
 	"testing"
 
 	"github.com/c-neto/image-renamer-admission-plugin/pkg/config"
+	"github.com/c-neto/image-renamer-admission-plugin/pkg/server"
 	admissionv1 "k8s.io/api/admission/v1"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 )
 
 func TestPatchContainerImages(t *testing.T) {
-	SetConfig(config.Config{
+	server.SetConfig(config.Config{
 		Rules: []config.Rule{
 			{Source: "nginx", Target: "my-registry/repo/nginx"},
 			{Source: "my-registry/repo/busybox", Target: "my-registry/repo/busybox"},
@@ -26,7 +27,7 @@ func TestPatchContainerImages(t *testing.T) {
 		{Image: "my-registry/repo/busybox"},
 	}
 
-	patchContainerImages(containers)
+	server.PatchContainerImages(containers)
 
 	if containers[0].Image != "my-registry/repo/nginx" {
 		t.Errorf("expected %s, got %s", "my-registry/repo/nginx", containers[0].Image)
@@ -37,7 +38,7 @@ func TestPatchContainerImages(t *testing.T) {
 }
 
 func TestAdmissionHandler(t *testing.T) {
-	SetConfig(config.Config{
+	server.SetConfig(config.Config{
 		Rules: []config.Rule{
 			{Source: "nginx", Target: "my-registry/repo/nginx"},
 		},
@@ -66,7 +67,7 @@ func TestAdmissionHandler(t *testing.T) {
 	}
 
 	rr := httptest.NewRecorder()
-	handler := http.HandlerFunc(AdmissionHandler)
+	handler := http.HandlerFunc(server.AdmissionHandler)
 	handler.ServeHTTP(rr, req)
 
 	if status := rr.Code; status != http.StatusOK {
@@ -94,7 +95,7 @@ func TestHealthHandler(t *testing.T) {
 	}
 
 	rr := httptest.NewRecorder()
-	handler := http.HandlerFunc(HealthHandler)
+	handler := http.HandlerFunc(server.HealthHandler)
 	handler.ServeHTTP(rr, req)
 
 	if status := rr.Code; status != http.StatusOK {
@@ -114,7 +115,7 @@ func TestReadinessHandler(t *testing.T) {
 	}
 
 	rr := httptest.NewRecorder()
-	handler := http.HandlerFunc(ReadinessHandler)
+	handler := http.HandlerFunc(server.ReadinessHandler)
 	handler.ServeHTTP(rr, req)
 
 	if status := rr.Code; status != http.StatusOK {

@@ -7,13 +7,14 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/c-neto/image-renamer-admission-plugin/pkg/admission"
 	"github.com/c-neto/image-renamer-admission-plugin/pkg/config"
+	"github.com/c-neto/image-renamer-admission-plugin/pkg/server"
 	admissionv1 "k8s.io/api/admission/v1"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 )
 
+// TestPatchContainerImages tests the PatchContainerImages function
 func TestPatchContainerImages(t *testing.T) {
 	cfg := config.Config{
 		Rules: []config.Rule{
@@ -21,14 +22,14 @@ func TestPatchContainerImages(t *testing.T) {
 			{Source: "my-registry/repo/busybox", Target: "my-registry/repo/busybox"},
 		},
 	}
-	admission.SetConfig(cfg)
+	server.SetConfig(cfg)
 
 	containers := []corev1.Container{
 		{Image: "nginx"},
 		{Image: "my-registry/repo/busybox"},
 	}
 
-	admission.PatchContainerImages(containers)
+	server.PatchContainerImages(containers)
 
 	if containers[0].Image != "my-registry/repo/nginx" {
 		t.Errorf("expected %s, got %s", "my-registry/repo/nginx", containers[0].Image)
@@ -38,13 +39,14 @@ func TestPatchContainerImages(t *testing.T) {
 	}
 }
 
+// TestAdmissionHandler tests the AdmissionHandler function
 func TestAdmissionHandler(t *testing.T) {
 	cfg := config.Config{
 		Rules: []config.Rule{
 			{Source: "nginx", Target: "my-registry/repo/nginx"},
 		},
 	}
-	admission.SetConfig(cfg)
+	server.SetConfig(cfg)
 
 	pod := corev1.Pod{
 		Spec: corev1.PodSpec{
@@ -69,7 +71,7 @@ func TestAdmissionHandler(t *testing.T) {
 	}
 
 	rr := httptest.NewRecorder()
-	handler := http.HandlerFunc(admission.AdmissionHandler)
+	handler := http.HandlerFunc(server.AdmissionHandler)
 	handler.ServeHTTP(rr, req)
 
 	if status := rr.Code; status != http.StatusOK {
@@ -90,6 +92,7 @@ func TestAdmissionHandler(t *testing.T) {
 	}
 }
 
+// TestHealthHandler tests the HealthHandler function
 func TestHealthHandler(t *testing.T) {
 	req, err := http.NewRequest("GET", "/healthz", nil)
 	if err != nil {
@@ -97,7 +100,7 @@ func TestHealthHandler(t *testing.T) {
 	}
 
 	rr := httptest.NewRecorder()
-	handler := http.HandlerFunc(admission.HealthHandler)
+	handler := http.HandlerFunc(server.HealthHandler)
 	handler.ServeHTTP(rr, req)
 
 	if status := rr.Code; status != http.StatusOK {
@@ -110,6 +113,7 @@ func TestHealthHandler(t *testing.T) {
 	}
 }
 
+// TestReadinessHandler tests the ReadinessHandler function
 func TestReadinessHandler(t *testing.T) {
 	req, err := http.NewRequest("GET", "/readyz", nil)
 	if err != nil {
@@ -117,7 +121,7 @@ func TestReadinessHandler(t *testing.T) {
 	}
 
 	rr := httptest.NewRecorder()
-	handler := http.HandlerFunc(admission.ReadinessHandler)
+	handler := http.HandlerFunc(server.ReadinessHandler)
 	handler.ServeHTTP(rr, req)
 
 	if status := rr.Code; status != http.StatusOK {

@@ -14,3 +14,6 @@ build-container:
 
 run-container:
 	docker run -p 8080:8080 image-renamer-admission-plugin
+
+template:
+	helmfile template -l image-renamer-admission-plugin

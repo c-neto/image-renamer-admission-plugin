@@ -10,3 +10,7 @@ spec:
   issuerRef:
     name: image-renamer-admission-plugin-selfsigned-issuer
     kind: Issuer
+  isCA: false
+  usages:
+    - server auth
+    - client auth

@@ -5,6 +5,6 @@ repositories:
 releases:
   - name: image-renamer-admission-plugin
     namespace: default
-    chart: ./deploy/helm/image-renamer-admission-plugin
+    chart: .
     values:
       - values.yaml

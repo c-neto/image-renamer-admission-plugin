@@ -3,23 +3,23 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: release-name-image-renamer-admission-plugin
+  name: image-renamer-admission-plugin
   labels:
     helm.sh/chart: "image-renamer-admission-plugin-0.1.0"
     app.kubernetes.io/name: "image-renamer-admission-plugin"
-    app.kubernetes.io/instance: "release-name"
+    app.kubernetes.io/instance: "image-renamer-admission-plugin"
     app.kubernetes.io/version: "1.0"
     app.kubernetes.io/managed-by: "Helm"
 spec:
   type: ClusterIP
   ports:
     - name: https
-      port: 80
+      port: 443
       targetPort: 8443
   selector:
     helm.sh/chart: "image-renamer-admission-plugin-0.1.0"
     app.kubernetes.io/name: "image-renamer-admission-plugin"
-    app.kubernetes.io/instance: "release-name"
+    app.kubernetes.io/instance: "image-renamer-admission-plugin"
     app.kubernetes.io/version: "1.0"
     app.kubernetes.io/managed-by: "Helm"
 ---
@@ -27,11 +27,11 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: release-name-image-renamer-admission-plugin
+  name: image-renamer-admission-plugin
   labels:
     helm.sh/chart: "image-renamer-admission-plugin-0.1.0"
     app.kubernetes.io/name: "image-renamer-admission-plugin"
-    app.kubernetes.io/instance: "release-name"
+    app.kubernetes.io/instance: "image-renamer-admission-plugin"
     app.kubernetes.io/version: "1.0"
     app.kubernetes.io/managed-by: "Helm"
 spec:
@@ -40,7 +40,7 @@ spec:
     matchLabels:
       helm.sh/chart: "image-renamer-admission-plugin-0.1.0"
       app.kubernetes.io/name: "image-renamer-admission-plugin"
-      app.kubernetes.io/instance: "release-name"
+      app.kubernetes.io/instance: "image-renamer-admission-plugin"
       app.kubernetes.io/version: "1.0"
       app.kubernetes.io/managed-by: "Helm"
   template:
@@ -48,14 +48,14 @@ spec:
       labels:
         helm.sh/chart: "image-renamer-admission-plugin-0.1.0"
         app.kubernetes.io/name: "image-renamer-admission-plugin"
-        app.kubernetes.io/instance: "release-name"
+        app.kubernetes.io/instance: "image-renamer-admission-plugin"
         app.kubernetes.io/version: "1.0"
         app.kubernetes.io/managed-by: "Helm"
     spec:
       containers:
         - name: image-renamer-admission-plugin
           image: "ghcr.io/c-neto/image-renamer-admission-plugin:main"
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           volumeMounts:
@@ -83,11 +83,15 @@ metadata:
   namespace: default
 spec:
   dnsNames:
-    - release-name-image-renamer-admission-plugin.default.svc
+    - image-renamer-admission-plugin.default.svc
   secretName: image-renamer-admission-plugin-tls
   issuerRef:
     name: image-renamer-admission-plugin-selfsigned-issuer
     kind: Issuer
+  isCA: false
+  usages:
+    - server auth
+    - client auth
 ---
 # Source: image-renamer-admission-plugin/templates/issuer.yaml
 apiVersion: cert-manager.io/v1
@@ -102,15 +106,15 @@ spec:
 apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
 metadata:
-  name: release-name-image-renamer-admission-plugin
+  name: image-renamer-admission-plugin
 webhooks:
   - name: image-renamer-admission-plugin.k8s.io
     clientConfig:
       service:
-        name: release-name-image-renamer-admission-plugin
+        name: image-renamer-admission-plugin
         namespace: default
         path: /mutate
-      caBundle: 
+      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURCVENDQWUyZ0F3SUJBZ0lJVzZHNExDTnRJWHN3RFFZSktvWklodmNOQVFFTEJRQXdGVEVUTUJFR0ExVUUKQXhNS2EzVmlaWEp1WlhSbGN6QWVGdzB5TlRBek1UWXdOekEwTWpaYUZ3MHpOVEF6TVRRd056QTVNalphTUJVeApFekFSQmdOVkJBTVRDbXQxWW1WeWJtVjBaWE13Z2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBQTRJQkR3QXdnZ0VLCkFvSUJBUUNwb1d1S0x5Rjk0RkVTQ3luZG8wVmlKSXVkMGtHTmlaMjd0VTJWMG8zQ0thQXhBSnIrNXhiZGNib3UKVlFxQnc2Y3NCZTFPS0YrK2w5OC9ITDdTSzZzZmpQbUJkbkkwVkFud2MvTWp6V3B6N0pML3Rpd2pQczdEZ1N3cApWOTVLWFoyRm9PSU5TMy9sUi9DbllOYk5Zd2UyTHkyMG0wdk1jdHFYYXo4aEU0OGp3TElHR3ljSlZUdk1rVE1hCmtIZmYzd01EeUN1SUNWQzVubGxRMFlCMGhraUF3TGFiLzJsdWdmb25FYk9Rdi9pTGh4UEYwclpDTEJnZ3NrbXQKUVpKNjZQYWJzRklKYS8xdzN0bnczVDhLKzBnbHJvRmUrS05uaHo4YXQ0VTV1bWJWSjIxTXVnT0lGdnNiRzFpMgp4dmNCWWxaT1pGclZONk1kTGN0WXBaYU9WTXk1QWdNQkFBR2pXVEJYTUE0R0ExVWREd0VCL3dRRUF3SUNwREFQCkJnTlZIUk1CQWY4RUJUQURBUUgvTUIwR0ExVWREZ1FXQkJTZDhjd0pPWTBkSjczY1NiaTBMYThEUGczaVd6QVYKQmdOVkhSRUVEakFNZ2dwcmRXSmxjbTVsZEdWek1BMEdDU3FHU0liM0RRRUJDd1VBQTRJQkFRQ0w3ZS9nVWp2YgpJN1JvS09EUkdvUmZlOXN4Q2l5QjVVR2RxY1hjdEF5bXZ4ZTZLc3E4cWZwZUVFOUtWRTdBcFJVOWZBWG1vcVFVCjZScTZxeDRBMlROWnllQ040SXpabEN4UGd3WmhsQkhkSzFpVjNkQVJ3ZVhQb08wZDJsaXN0SHNsbkIwSDUwbDUKRDNWcjVpSUVkd0RaKzFiRWFzMDJOQjN0TUVoQVZ3RnFhcVdXcGJ3ZjUySHhMM21FbkV4Y0QvdWs5NDZZd2ZNSgpMV2ppeHpnMlpkNDcxQnBzcHZ5NFJjczNYL2tHb3dZbGlUYkUzelFVMjh5NUVTTzFOdi8xTzhOZ083aFBHLzl4CmZoTjhWSXF3UzJ4WUNGUVV3SFdNellrV21EVERVR1JGSVIvcUFNOUFGc25QMHI5OEdCTWU5cHlYWTRqcmZNWW8KZkIvV3k5YUNxcDN0Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
     rules:
       - operations: ["CREATE"]
         apiGroups: [""]
@@ -119,3 +123,4 @@ webhooks:
     failurePolicy: Fail
     admissionReviewVersions: ["v1"]
     sideEffects: None
+

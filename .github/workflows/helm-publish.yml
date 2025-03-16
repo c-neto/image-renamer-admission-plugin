@@ -33,4 +33,4 @@ jobs:
 
       - name: Publish Helm chart
         run: |
-          helm push image-renamer-admission-controller-*.tgz oci://ghcr.io/${{ github.repository_owner }}/helm-charts
+          helm push /image-renamer-admission-plugin/image-renamer-admission-controller-*.tgz oci://ghcr.io/${{ github.repository_owner }}/helm-charts

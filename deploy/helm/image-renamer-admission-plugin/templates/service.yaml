@@ -7,9 +7,8 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: 8080
-    - port: 443
+    - name: https
+      port: {{ .Values.service.port }}
       targetPort: 8443
   selector:
     {{- include "image-renamer-admission-plugin.selectorLabels" . | nindent 4 }}

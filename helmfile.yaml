@@ -1,0 +1,10 @@
+repositories:
+  - name: stable
+    url: https://charts.helm.sh/stable
+
+releases:
+  - name: image-renamer-admission-plugin
+    namespace: default
+    chart: ./deploy/helm/image-renamer-admission-plugin
+    values:
+      - values.yaml

@@ -3,3 +3,5 @@ name: image-renamer-admission-plugin
 description: A Helm chart for deploying the Image Renamer Admission Controller
 version: 0.1.0
 appVersion: "1.0"
+
+# ghcr.io/c-neto/helm-charts/image-renamer-admission-plugin

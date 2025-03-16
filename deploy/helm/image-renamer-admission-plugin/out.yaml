@@ -1,0 +1,121 @@
+---
+# Source: image-renamer-admission-plugin/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: release-name-image-renamer-admission-plugin
+  labels:
+    helm.sh/chart: "image-renamer-admission-plugin-0.1.0"
+    app.kubernetes.io/name: "image-renamer-admission-plugin"
+    app.kubernetes.io/instance: "release-name"
+    app.kubernetes.io/version: "1.0"
+    app.kubernetes.io/managed-by: "Helm"
+spec:
+  type: ClusterIP
+  ports:
+    - name: https
+      port: 80
+      targetPort: 8443
+  selector:
+    helm.sh/chart: "image-renamer-admission-plugin-0.1.0"
+    app.kubernetes.io/name: "image-renamer-admission-plugin"
+    app.kubernetes.io/instance: "release-name"
+    app.kubernetes.io/version: "1.0"
+    app.kubernetes.io/managed-by: "Helm"
+---
+# Source: image-renamer-admission-plugin/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: release-name-image-renamer-admission-plugin
+  labels:
+    helm.sh/chart: "image-renamer-admission-plugin-0.1.0"
+    app.kubernetes.io/name: "image-renamer-admission-plugin"
+    app.kubernetes.io/instance: "release-name"
+    app.kubernetes.io/version: "1.0"
+    app.kubernetes.io/managed-by: "Helm"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      helm.sh/chart: "image-renamer-admission-plugin-0.1.0"
+      app.kubernetes.io/name: "image-renamer-admission-plugin"
+      app.kubernetes.io/instance: "release-name"
+      app.kubernetes.io/version: "1.0"
+      app.kubernetes.io/managed-by: "Helm"
+  template:
+    metadata:
+      labels:
+        helm.sh/chart: "image-renamer-admission-plugin-0.1.0"
+        app.kubernetes.io/name: "image-renamer-admission-plugin"
+        app.kubernetes.io/instance: "release-name"
+        app.kubernetes.io/version: "1.0"
+        app.kubernetes.io/managed-by: "Helm"
+    spec:
+      containers:
+        - name: image-renamer-admission-plugin
+          image: "ghcr.io/c-neto/image-renamer-admission-plugin:main"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: tls-certs
+              mountPath: /tls
+              readOnly: true
+          resources:
+            {}
+      volumes:
+        - name: tls-certs
+          secret:
+            secretName: image-renamer-admission-plugin-tls
+      nodeSelector:
+        {}
+      tolerations:
+        []
+      affinity:
+        {}
+---
+# Source: image-renamer-admission-plugin/templates/certificate.yaml
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: image-renamer-admission-plugin-tls
+  namespace: default
+spec:
+  dnsNames:
+    - release-name-image-renamer-admission-plugin.default.svc
+  secretName: image-renamer-admission-plugin-tls
+  issuerRef:
+    name: image-renamer-admission-plugin-selfsigned-issuer
+    kind: Issuer
+---
+# Source: image-renamer-admission-plugin/templates/issuer.yaml
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: image-renamer-admission-plugin-selfsigned-issuer
+  namespace: default
+spec:
+  selfSigned: {}
+---
+# Source: image-renamer-admission-plugin/templates/mutatingwebhookconfiguration.yaml
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: release-name-image-renamer-admission-plugin
+webhooks:
+  - name: image-renamer-admission-plugin.k8s.io
+    clientConfig:
+      service:
+        name: release-name-image-renamer-admission-plugin
+        namespace: default
+        path: /mutate
+      caBundle: 
+    rules:
+      - operations: ["CREATE"]
+        apiGroups: [""]
+        apiVersions: ["v1"]
+        resources: ["pods"]
+    failurePolicy: Fail
+    admissionReviewVersions: ["v1"]
+    sideEffects: None

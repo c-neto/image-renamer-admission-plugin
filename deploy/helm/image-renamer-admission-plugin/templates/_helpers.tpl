@@ -7,8 +7,15 @@
 {{- end }}
 
 {{- define "image-renamer-admission-plugin.labels" -}}
-helm.sh/chart: {{ include "image-renamer-admission-plugin.chart" . }}
-{{ include "image-renamer-admission-plugin.selectorLabels" . }}
+helm.sh/chart: {{ include "image-renamer-admission-plugin.chart" . | quote }}
+app.kubernetes.io/name: {{ include "image-renamer-admission-plugin.name" . | quote }}
+app.kubernetes.io/instance: {{ .Release.Name | quote }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+{{- end }}
+
+{{- define "image-renamer-admission-plugin.name" -}}
+{{ .Chart.Name }}
 {{- end }}
 
 {{- define "image-renamer-admission-plugin.chart" -}}

@@ -9,7 +9,7 @@ webhooks:
         name: {{ include "image-renamer-admission-plugin.fullname" . }}
         namespace: {{ .Release.Namespace }}
         path: /mutate
-      caBundle: {{ .Values.caBundle | default (lookup "v1" "Secret" .Release.Namespace "image-renamer-admission-plugin-tls").data."ca.crt" | b64enc }}
+      caBundle: {{ .Values.caBundle }}
     rules:
       - operations: ["CREATE"]
         apiGroups: [""]
@@ -17,3 +17,4 @@ webhooks:
         resources: ["pods"]
     failurePolicy: Fail
     admissionReviewVersions: ["v1"]
+    sideEffects: None

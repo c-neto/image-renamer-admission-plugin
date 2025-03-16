@@ -1,3 +1,4 @@
+
 # Use the official Golang image as the base image
 FROM golang:1.24.1 as builder
 
@@ -17,7 +18,7 @@ COPY . .
 RUN go build -o image-renamer-admission-plugin ./cmd/image-renamer-admission-plugin
 
 # Use a minimal base image for the final stage
-FROM gcr.io/distroless/static-debian12
+FROM gcr.io/distroless/base-debian12
 
 # Set the working directory inside the container
 WORKDIR /app

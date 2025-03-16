@@ -30,9 +30,8 @@ jobs:
 
       - name: Package Helm chart
         run: |
-          helm package deploy/helm/image-renamer-admission-controller
-          ls -lahrt
+          helm package deploy/helm/image-renamer-admission-plugin
 
       - name: Publish Helm chart
         run: |
-          helm push /image-renamer-admission-plugin/image-renamer-admission-controller-*.tgz oci://ghcr.io/${{ github.repository_owner }}/helm-charts
+          helm push image-renamer-admission-plugin-*.tgz oci://ghcr.io/${{ github.repository_owner }}/helm-charts

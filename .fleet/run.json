@@ -1,0 +1,17 @@
+{
+  "configurations": [
+    {
+      "type": "go",
+      "name": "webapp",
+      "goExecPath": "/opt/homebrew/bin/go",
+      "buildParams": [
+          "$PROJECT_DIR$/cmd/image-renamer-admission-plugin/main.go",
+      ],
+      "environmentFile": ".env",
+      "runParams":  [
+        "--http"
+      ],
+      "workingDir": "$PROJECT_DIR$"
+    }
+  ]
+}
